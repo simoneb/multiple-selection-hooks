@@ -4,6 +4,7 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import matches from 'lodash/matches'
 import { getOptions, stripFalsyProps } from './utils'
+import set from 'lodash/set'
 
 export default function useMultipleSelection(
   data,
@@ -14,9 +15,8 @@ export default function useMultipleSelection(
 ) {
   return useMemo(() => {
     const options = getOptions(data, keys, values)
-      .map((option, index, options) => ({
-        ...option,
-        field: {
+      .map((option, index, options) =>
+        set(option, 'field', {
           name: option.name,
           readOnly: option.allowedValues.length === 1,
           disabled:
@@ -29,23 +29,20 @@ export default function useMultipleSelection(
             // when changing an option, reset all next options
             options
               .slice(options.indexOf(find(options, { name: option.name })))
-              // formik resets a field whose value is undefined
               .forEach(o => setFieldValue(o.name, ''))
 
             handleChange(e)
           }
-        }
-      }))
-      .map((option, index, options) => ({
-        ...option,
-        field: {
-          ...option.field,
-          disabled:
-            // already disabled or the previous one is disabled
-            option.field.disabled ||
+        })
+      )
+      .map((option, index, options) =>
+        set(
+          option,
+          'field.disabled',
+          option.field.disabled ||
             (index > 0 && options[index - 1].field.disabled)
-        }
-      }))
+        )
+      )
 
     // set any option to the only allowed
     // value if there is only one
