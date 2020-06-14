@@ -15,7 +15,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Formik initialValues={initialValues}>
+      <Formik initialValues={{}}>
         <MultipleSelection data={data} />
       </Formik>
     </div>

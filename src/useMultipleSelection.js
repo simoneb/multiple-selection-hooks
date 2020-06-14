@@ -33,8 +33,8 @@ export default function useMultipleSelection(
               .forEach(o => setFieldValue(o.name, ''))
 
             handleChange(e)
-          },
-        },
+          }
+        }
       }))
       .map((option, index, options) => ({
         ...option,
@@ -43,8 +43,8 @@ export default function useMultipleSelection(
           disabled:
             // already disabled or the previous one is disabled
             option.field.disabled ||
-            (index > 0 && options[index - 1].field.disabled),
-        },
+            (index > 0 && options[index - 1].field.disabled)
+        }
       }))
 
     // set any option to the only allowed
@@ -54,7 +54,6 @@ export default function useMultipleSelection(
         option.allowedValues.length === 1 &&
         get(values, option.name) !== option.allowedValues[0]
       ) {
-        console.log(values, option.name, option.allowedValues[0])
         setFieldValue(option.name, option.allowedValues[0])
       }
     })
@@ -63,7 +62,7 @@ export default function useMultipleSelection(
 
     return {
       options,
-      result,
+      result
     }
   }, [data, keys, values, setFieldValue, handleChange])
 }

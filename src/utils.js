@@ -22,17 +22,17 @@ export function getOptions(data, keys, values) {
   return keys
     .map(key => ({
       name: key,
-      exclusive: data.every(d => d[key]) || data.every(d => !d[key]),
+      wildcard: data.some(d => d[key]) && data.some(d => !d[key])
     }))
     .map((option, index) => ({
       ...option,
       values: compact(uniq(map(data, option.name))),
-      allowedValues: getAllowedValues(data, keys, values, option, index),
+      allowedValues: getAllowedValues(data, keys, values, option, index)
     }))
     .map(option => ({
       ...option,
-      values: option.values.concat(option.exclusive ? [] : [ANY]),
-      allowedValues: option.allowedValues.concat(option.exclusive ? [] : [ANY]),
+      values: option.values.concat(option.wildcard ? [ANY] : []),
+      allowedValues: option.allowedValues.concat(option.wildcard ? [ANY] : [])
     }))
 }
 
